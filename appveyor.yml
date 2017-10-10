@@ -1,0 +1,16 @@
+version: 1.0.{build}
+build_script:
+- ps: >-
+    dotnet restore
+
+    dotnet build -c Release csMACnz.SeaOrDew.sln /property:VersionPrefix=$env:APPVEYOR_BUILD_VERSION
+
+    #TODO Test
+    
+    #dotnet test -c Release .\test\csMACnz.FluentJsonBuilder.Tests\csMACnz.FluentJsonBuilder.Tests.csproj
+
+    dotnet pack -c Release -o ${pwd} .\src\csMACnz.SeaOrDew\csMACnz.SeaOrDew.csproj /property:VersionPrefix=$env:APPVEYOR_BUILD_VERSION
+test: off
+artifacts:
+- path: csMACnz.SeaOrDew.*.nupkg
+  name: nuget   
