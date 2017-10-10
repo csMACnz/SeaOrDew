@@ -5,9 +5,7 @@ build_script:
 
     dotnet build -c Release csMACnz.SeaOrDew.sln /property:VersionPrefix=$env:APPVEYOR_BUILD_VERSION
 
-    #TODO Test
-    
-    #dotnet test -c Release .\test\csMACnz.FluentJsonBuilder.Tests\csMACnz.FluentJsonBuilder.Tests.csproj
+    dotnet test -c Release .\src\csMACnz.SeaOrDew.Tests\csMACnz.SeaOrDew.Tests.csproj
 
     dotnet pack -c Release -o ${pwd} .\src\csMACnz.SeaOrDew\csMACnz.SeaOrDew.csproj /property:VersionPrefix=$env:APPVEYOR_BUILD_VERSION
 test: off

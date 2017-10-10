@@ -19,10 +19,9 @@ namespace csMACnz.SeaOrDew
             return await service.Handle(command);
         }
 
-        public async Task<CommandResult<CommandError>> Handle<TCommand>(TCommand command)
+        public Task<CommandResult<CommandError>> Handle<TCommand>(TCommand command)
         {
-            var service = _provider.GetRequiredService<ICommandHandler<TCommand, CommandError>>();
-            return await service.Handle(command);
+            return Handle<TCommand, CommandError>(command);
         }
     }
 }

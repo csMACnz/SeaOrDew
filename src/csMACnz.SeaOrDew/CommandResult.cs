@@ -4,14 +4,15 @@
     {
         public TError Problem { get; }
 
-        public bool IsSuccess => Problem == null;
+        public bool IsSuccess { get; }
 
         public static CommandResult<TError> Success => new CommandResult<TError>();
 
-        private CommandResult() { }
+        private CommandResult() { IsSuccess = true; }
 
         public CommandResult(TError problem)
         {
+            IsSuccess = false;
             Problem = problem;
         }
 
