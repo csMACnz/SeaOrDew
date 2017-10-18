@@ -63,7 +63,7 @@ namespace csMACnz.SeaOrDew.Tests
 
             var sut = new CommandHandler(fakeprovider);
 
-            var result = await sut.Handle(new DoMakeWidgetCommand());
+            var result = await sut.HandleDefault(new DoMakeWidgetCommand());
             Assert.NotNull(result);
             Assert.True(result.IsSuccess);
             Assert.Equal(default(CommandError), result.Problem);
