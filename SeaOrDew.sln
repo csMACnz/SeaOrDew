@@ -8,7 +8,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "csMACnz.SeaOrDew.Tests", "t
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{B45EDECE-15D1-4A63-A0A6-E5DD5DF6ECAA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "csMACnz.SeaOrDew.AspNetCore2Tests", "test\csMACnz.SeaOrDew.AspNetCore2Tests\csMACnz.SeaOrDew.AspNetCore2Tests.csproj", "{5181B9B1-4553-47C6-88F7-E523801D1870}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "csMACnz.SeaOrDew.AspNetCoreTests", "test\csMACnz.SeaOrDew.AspNetCoreTests\csMACnz.SeaOrDew.AspNetCoreTests.csproj", "{5181B9B1-4553-47C6-88F7-E523801D1870}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

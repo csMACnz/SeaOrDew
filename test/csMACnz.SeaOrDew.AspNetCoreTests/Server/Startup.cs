@@ -2,8 +2,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
+using csMACnz.SeaOrDew;
+using System.Reflection;
 
-namespace csMACnz.SeaOrDew.AspNetCore2Tests.Server
+namespace Tests.Server
 {
     public class Startup
     {
@@ -11,7 +13,7 @@ namespace csMACnz.SeaOrDew.AspNetCore2Tests.Server
         {
             services.AddSeaOrDewHandlers(options =>
             {
-                options.LoadAllHandlersFromAssembly(typeof(Startup).Assembly);
+                options.LoadAllHandlersFromAssembly(typeof(Startup).GetTypeInfo().Assembly);
                 options.UseLifetimeScope(ServiceLifetime.Scoped);
             });
         }

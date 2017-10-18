@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
+using csMACnz.SeaOrDew;
 
-namespace csMACnz.SeaOrDew.AspNetCore2Tests.Server
+namespace Tests.Server
 {
     public class TestQueryHandler : IQueryHandler<TestQuery, TestResult>
     {

@@ -1,9 +1,9 @@
-using csMACnz.SeaOrDew.AspNetCore2Tests.Server;
+using Tests.Server;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using System.Net.Http;
 
-namespace csMACnz.SeaOrDew.AspNetCore2Tests
+namespace Tests
 {
     public class GivenAnHttpContext
     {

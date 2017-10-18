@@ -2,7 +2,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace csMACnz.SeaOrDew.AspNetCore2Tests
+namespace Tests
 {
     public class QueryResolvesSuccessfully:GivenAnHttpContext
     {

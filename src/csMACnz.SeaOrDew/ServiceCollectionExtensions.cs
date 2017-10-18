@@ -62,8 +62,8 @@ namespace csMACnz.SeaOrDew
 
         private static void AddInstancesOfGenericTypeDefinition(IServiceCollection services, Assembly assembly, Type genericTypeDefinition, ServiceLifetime lifetime, bool tryAdd)
         {
-            var matches = assembly
-                .DefinedTypes
+            var matches = 
+                GetAccessibleTypes(assembly)
                 .Select(t =>
                 new
                 {
@@ -95,5 +95,18 @@ namespace csMACnz.SeaOrDew
         {
             return interfaceType.GetTypeInfo().IsGenericType && interfaceType.GetGenericTypeDefinition() == genericTypeDefinition;
         }
+
+        private static IEnumerable<TypeInfo> GetAccessibleTypes(this Assembly assembly)
+        {
+            try
+            {
+                return assembly.DefinedTypes;
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                return ex.Types.Where(t => t != null).Select(t => t.GetTypeInfo());
+            }
+        }
+
     }
 }
