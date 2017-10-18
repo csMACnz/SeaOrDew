@@ -16,14 +16,14 @@ namespace csMACnz.SeaOrDew
 
         public bool TryAdd { get; set; }
 
-        public void AutoLoadQueryHandlersFromAssembly(Assembly assembly)
+        public void LoadQueryHandlers(HandlerSource source)
         {
-            _queryAssemblies.Add(new HandlerSource(assembly));
+            _queryAssemblies.Add(source);
         }
 
-        public void AutoLoadCommandHandlersFromAssembly(Assembly assembly)
+        public void LoadCommandHandlers(HandlerSource source)
         {
-            _commandAssemblies.Add(new HandlerSource(assembly));
+            _commandAssemblies.Add(source);
         }
 
         public void UseLifetimeScope(ServiceLifetime lifetime)
@@ -34,21 +34,69 @@ namespace csMACnz.SeaOrDew
 
     public static class SeaOrDewOptionsExtensions
     {
-        public static void LoadAllHandlersFromAssembly(this SeaOrDewOptions options, Assembly assembly)
+        public static void LoadCommandHandlersFromAssembly(
+            this SeaOrDewOptions options,
+            Assembly assembly)
         {
-            options.AutoLoadCommandHandlersFromAssembly(assembly);
-            options.AutoLoadQueryHandlersFromAssembly(assembly);
+            options.LoadCommandHandlers(new HandlerSource(assembly));
+        }
+
+        public static void LoadQueryHandlersFromAssembly(
+            this SeaOrDewOptions options,
+            Assembly assembly)
+        {
+            options.LoadQueryHandlers(new HandlerSource(assembly));
+        }
+
+        public static void LoadAllHandlersFromAssembly(
+            this SeaOrDewOptions options,
+            Assembly assembly)
+        {
+            options.LoadCommandHandlersFromAssembly(assembly);
+            options.LoadQueryHandlersFromAssembly(assembly);
+        }
+
+        public static void LoadCommandHandlersFromAssemblyUnderNamespace(
+            this SeaOrDewOptions options,
+            Assembly assembly,
+            string namespacePrefix)
+        {
+            options.LoadCommandHandlers(new HandlerSource(assembly, namespacePrefix));
+        }
+
+        public static void LoadQueryHandlersFromAssemblyUnderNamespace(
+            this SeaOrDewOptions options,
+            Assembly assembly,
+            string namespacePrefix)
+        {
+            options.LoadQueryHandlers(new HandlerSource(assembly, namespacePrefix));
+        }
+
+        public static void LoadAssemblyHandlersUnderNamespace(
+            this SeaOrDewOptions options,
+            Assembly assembly,
+            string namespacePrefix)
+        {
+            options.LoadCommandHandlersFromAssemblyUnderNamespace(assembly, namespacePrefix);
+            options.LoadQueryHandlersFromAssemblyUnderNamespace(assembly, namespacePrefix);
         }
     }
 
     public class HandlerSource
     {
         public HandlerSource(Assembly assembly)
+            :this(assembly, null)
+        {
+        }
+
+        public HandlerSource(Assembly assembly, string namespacePrefix)
         {
             //TODO: add Namespace filter options, class name prefix, suffix filters?
             Assembly = assembly;
+            NamespacePrefix = namespacePrefix;
         }
 
         public Assembly Assembly { get; }
+        public string NamespacePrefix { get; }
     }
 }

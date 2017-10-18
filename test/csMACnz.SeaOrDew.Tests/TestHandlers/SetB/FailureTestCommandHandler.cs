@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace csMACnz.SeaOrDew.Tests.TestHandlers.SetA
+namespace csMACnz.SeaOrDew.Tests.TestHandlers.SetB
 {
     public class FailureTestCommandHandler : ICommandHandler<FailureTestCommand>
     {

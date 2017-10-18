@@ -24,11 +24,11 @@ namespace csMACnz.SeaOrDew
             {
                 foreach (var handlerSource in options.CommandHandlerAssemblies)
                 {
-                    AddInstancesOfGenericTypeDefinition(services, handlerSource.Assembly, typeof(ICustomCommandHandler<,>), options.ServiceLifetime, options.TryAdd);
+                    AddInstancesOfGenericTypeDefinition(services, handlerSource.Assembly, handlerSource.NamespacePrefix, typeof(ICustomCommandHandler<,>), options.ServiceLifetime, options.TryAdd);
                 }
                 foreach (var handlerSource in options.QueryHandlerAssemblies)
                 {
-                    AddInstancesOfGenericTypeDefinition(services, handlerSource.Assembly, typeof(IQueryHandler<,>), options.ServiceLifetime, options.TryAdd);
+                    AddInstancesOfGenericTypeDefinition(services, handlerSource.Assembly, handlerSource.NamespacePrefix, typeof(IQueryHandler<,>), options.ServiceLifetime, options.TryAdd);
                 }
             }
             return services;
@@ -60,9 +60,9 @@ namespace csMACnz.SeaOrDew
             return services;
         }
 
-        private static void AddInstancesOfGenericTypeDefinition(IServiceCollection services, Assembly assembly, Type genericTypeDefinition, ServiceLifetime lifetime, bool tryAdd)
+        private static void AddInstancesOfGenericTypeDefinition(IServiceCollection services, Assembly assembly, string namespacePrefix, Type genericTypeDefinition, ServiceLifetime lifetime, bool tryAdd)
         {
-            var matches = 
+            var matches =
                 GetAccessibleTypes(assembly)
                 .Select(t =>
                 new
@@ -70,7 +70,9 @@ namespace csMACnz.SeaOrDew
                     HandlerType = t,
                     Interface = GetConcreteInterfaceImplementationType(t, genericTypeDefinition)
                 })
-                .Where(t => t.Interface != null);
+                .Where(t =>
+                    t.Interface != null &&
+                    (string.IsNullOrEmpty(namespacePrefix) || t.HandlerType.Namespace.StartsWith(namespacePrefix)));
 
             foreach (var matcheResult in matches)
             {
@@ -85,7 +87,7 @@ namespace csMACnz.SeaOrDew
                 }
             }
         }
-        
+
         private static Type GetConcreteInterfaceImplementationType(TypeInfo type, Type genericTypeDefinition)
         {
             return type.ImplementedInterfaces.FirstOrDefault(i => InterfaceMatchesGenericTypeDefinition(i, genericTypeDefinition));
