@@ -4,9 +4,11 @@ VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "csMACnz.SeaOrDew", "src\csMACnz.SeaOrDew\csMACnz.SeaOrDew.csproj", "{78C73ED4-C121-4FBC-859C-23BFD478897B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9F97B78B-5316-46BF-BE63-A05A96140E83}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "csMACnz.SeaOrDew.Tests", "test\csMACnz.SeaOrDew.Tests\csMACnz.SeaOrDew.Tests.csproj", "{E9485A2D-672B-4211-B72C-DCD589117921}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "csMACnz.SeaOrDew.Tests", "src\csMACnz.SeaOrDew.Tests\csMACnz.SeaOrDew.Tests.csproj", "{E9485A2D-672B-4211-B72C-DCD589117921}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{B45EDECE-15D1-4A63-A0A6-E5DD5DF6ECAA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "csMACnz.SeaOrDew.AspNetCore2Tests", "test\csMACnz.SeaOrDew.AspNetCore2Tests\csMACnz.SeaOrDew.AspNetCore2Tests.csproj", "{5181B9B1-4553-47C6-88F7-E523801D1870}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,12 +44,25 @@ Global
 		{E9485A2D-672B-4211-B72C-DCD589117921}.Release|x64.Build.0 = Release|Any CPU
 		{E9485A2D-672B-4211-B72C-DCD589117921}.Release|x86.ActiveCfg = Release|Any CPU
 		{E9485A2D-672B-4211-B72C-DCD589117921}.Release|x86.Build.0 = Release|Any CPU
+		{5181B9B1-4553-47C6-88F7-E523801D1870}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5181B9B1-4553-47C6-88F7-E523801D1870}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5181B9B1-4553-47C6-88F7-E523801D1870}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5181B9B1-4553-47C6-88F7-E523801D1870}.Debug|x64.Build.0 = Debug|Any CPU
+		{5181B9B1-4553-47C6-88F7-E523801D1870}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5181B9B1-4553-47C6-88F7-E523801D1870}.Debug|x86.Build.0 = Debug|Any CPU
+		{5181B9B1-4553-47C6-88F7-E523801D1870}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5181B9B1-4553-47C6-88F7-E523801D1870}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5181B9B1-4553-47C6-88F7-E523801D1870}.Release|x64.ActiveCfg = Release|Any CPU
+		{5181B9B1-4553-47C6-88F7-E523801D1870}.Release|x64.Build.0 = Release|Any CPU
+		{5181B9B1-4553-47C6-88F7-E523801D1870}.Release|x86.ActiveCfg = Release|Any CPU
+		{5181B9B1-4553-47C6-88F7-E523801D1870}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{E9485A2D-672B-4211-B72C-DCD589117921} = {9F97B78B-5316-46BF-BE63-A05A96140E83}
+		{E9485A2D-672B-4211-B72C-DCD589117921} = {B45EDECE-15D1-4A63-A0A6-E5DD5DF6ECAA}
+		{5181B9B1-4553-47C6-88F7-E523801D1870} = {B45EDECE-15D1-4A63-A0A6-E5DD5DF6ECAA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {014BD877-789C-44D2-B004-2487AA71642A}

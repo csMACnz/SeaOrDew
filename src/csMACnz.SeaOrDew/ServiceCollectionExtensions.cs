@@ -28,7 +28,7 @@ namespace csMACnz.SeaOrDew
                 }
                 foreach (var handlerSource in options.QueryHandlerAssemblies)
                 {
-                    AddInstancesOfGenericTypeDefinition(services, handlerSource.Assembly, typeof(ICustomCommandHandler<,>), options.ServiceLifetime, options.TryAdd);
+                    AddInstancesOfGenericTypeDefinition(services, handlerSource.Assembly, typeof(IQueryHandler<,>), options.ServiceLifetime, options.TryAdd);
                 }
             }
             return services;
@@ -50,7 +50,7 @@ namespace csMACnz.SeaOrDew
 
         private static IServiceCollection RegisterHandler(IServiceCollection services, Type targetType, Type genericTypeDefinition, ServiceLifetime lifetime)
         {
-            var interfaceType = GetConcreteInterfaceImplementationType(targetType, genericTypeDefinition);
+            var interfaceType = GetConcreteInterfaceImplementationType(targetType.GetTypeInfo(), genericTypeDefinition);
             if (interfaceType is null)
             {
                 throw new NotSupportedException($"The type {targetType} doesn't implement {genericTypeDefinition}.");
@@ -62,19 +62,19 @@ namespace csMACnz.SeaOrDew
 
         private static void AddInstancesOfGenericTypeDefinition(IServiceCollection services, Assembly assembly, Type genericTypeDefinition, ServiceLifetime lifetime, bool tryAdd)
         {
-            var matches =
-                GetLoadableTypes(assembly)
-                .Where(t => TypeImplementsGenericInterface(t, genericTypeDefinition))
+            var matches = assembly
+                .DefinedTypes
                 .Select(t =>
                 new
                 {
                     HandlerType = t,
                     Interface = GetConcreteInterfaceImplementationType(t, genericTypeDefinition)
-                });
+                })
+                .Where(t => t.Interface != null);
 
             foreach (var matcheResult in matches)
             {
-                var descriptor = new ServiceDescriptor(matcheResult.Interface, matcheResult.HandlerType, lifetime);
+                var descriptor = new ServiceDescriptor(matcheResult.Interface, matcheResult.HandlerType.AsType(), lifetime);
                 if (tryAdd)
                 {
                     services.TryAdd(descriptor);
@@ -85,33 +85,15 @@ namespace csMACnz.SeaOrDew
                 }
             }
         }
-
-        private static bool TypeImplementsGenericInterface(Type type, Type genericTypeDefinition)
+        
+        private static Type GetConcreteInterfaceImplementationType(TypeInfo type, Type genericTypeDefinition)
         {
-            return null != GetConcreteInterfaceImplementationType(type, genericTypeDefinition);
-        }
-
-        private static Type GetConcreteInterfaceImplementationType(Type type, Type genericTypeDefinition)
-        {
-            return type.GetTypeInfo().ImplementedInterfaces.FirstOrDefault(i => InterfaceMatchesGenericTypeDefinition(i, genericTypeDefinition));
+            return type.ImplementedInterfaces.FirstOrDefault(i => InterfaceMatchesGenericTypeDefinition(i, genericTypeDefinition));
         }
 
         private static bool InterfaceMatchesGenericTypeDefinition(Type interfaceType, Type genericTypeDefinition)
         {
             return interfaceType.GetTypeInfo().IsGenericType && interfaceType.GetGenericTypeDefinition() == genericTypeDefinition;
-        }
-
-        private static IEnumerable<Type> GetLoadableTypes(this Assembly assembly)
-        {
-            if (assembly == null) throw new ArgumentNullException(nameof(assembly));
-            try
-            {
-                return assembly.GetLoadableTypes();
-            }
-            catch (ReflectionTypeLoadException e)
-            {
-                return e.Types.Where(t => t != null);
-            }
         }
     }
 }

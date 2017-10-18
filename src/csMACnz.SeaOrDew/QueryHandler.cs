@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace csMACnz.SeaOrDew
 {
@@ -22,10 +23,12 @@ namespace csMACnz.SeaOrDew
 
     public static class QueryHandlerExtensions
     {
-        public static Task<TResult> Handle<TQuery, TResult>(this QueryHandler handler, TQuery command)
-        where TQuery : IQuery<TResult>
+        public static Task<TResult> Handle<TResult>(this QueryHandler handler, IQuery<TResult> command)
         {
-            return handler.Handle<TQuery, TResult>(command);
+            var queryType = command.GetType();
+            var resultType = typeof(TResult);
+            var handleMethod = typeof(QueryHandler).GetTypeInfo().GetDeclaredMethod(nameof(QueryHandler.Handle)).MakeGenericMethod(queryType, resultType);
+            return (Task<TResult>)handleMethod.Invoke(handler, new[] { command });
         }
     }
 }

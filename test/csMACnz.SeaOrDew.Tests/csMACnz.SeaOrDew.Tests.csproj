@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\csMACnz.SeaOrDew\csMACnz.SeaOrDew.csproj" />
+    <ProjectReference Include="..\..\src\csMACnz.SeaOrDew\csMACnz.SeaOrDew.csproj" />
   </ItemGroup>
 
 </Project>

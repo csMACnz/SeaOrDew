@@ -20,5 +20,10 @@
         {
             return new CommandResult<TError>(problem);
         }
+
+        public static implicit operator CommandResult<TError>(Handler.SuccessHandlerResult success)
+        {
+            return CommandResult<TError>.Success;
+        }
     }
 }
