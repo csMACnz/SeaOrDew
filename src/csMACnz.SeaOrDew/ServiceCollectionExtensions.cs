@@ -9,39 +9,91 @@ namespace csMACnz.SeaOrDew
 {
     public static class ServiceCollectionExtensions
     {
-        public static void AddSeaOrDewHandlers(this IServiceCollection services, SeaOrDewOptions options = null)
+        public static IServiceCollection AddSeaOrDewHandlers(this IServiceCollection services, Action<SeaOrDewOptions> optionsSetup)
+        {
+            var options = new SeaOrDewOptions();
+            optionsSetup?.Invoke(options);
+            return services.AddSeaOrDewHandlers(options);
+        }
+
+        public static IServiceCollection AddSeaOrDewHandlers(this IServiceCollection services, SeaOrDewOptions options = null)
         {
             services.AddSingleton<QueryHandler>();
             services.AddSingleton<CommandHandler>();
-            if(options != null)
+            if (options != null)
             {
-                foreach(var assembly in options.CommandHandlerAssemblies)
+                foreach (var handlerSource in options.CommandHandlerAssemblies)
                 {
-                    AddInstancesOfGenericTypeDefinition(services, assembly, typeof(ICommandHandler<,>), ServiceLifetime.Scoped);        
+                    AddInstancesOfGenericTypeDefinition(services, handlerSource.Assembly, typeof(ICustomCommandHandler<,>), options.ServiceLifetime, options.TryAdd);
                 }
-                foreach(var assembly in options.QueryHandlerAssemblies)
+                foreach (var handlerSource in options.QueryHandlerAssemblies)
                 {
-                    AddInstancesOfGenericTypeDefinition(services, assembly, typeof(ICommandHandler<,>), ServiceLifetime.Scoped);        
+                    AddInstancesOfGenericTypeDefinition(services, handlerSource.Assembly, typeof(ICustomCommandHandler<,>), options.ServiceLifetime, options.TryAdd);
                 }
             }
+            return services;
         }
 
-        private static void AddInstancesOfGenericTypeDefinition(IServiceCollection services, Assembly assembly, Type genericTypeDefinition, ServiceLifetime lifetime)
+        public static IServiceCollection RegisterQueryHandler<TImpl>(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Scoped)
         {
-            var matches = 
+            var targetType = typeof(TImpl);
+            var genericTypeDefinition = typeof(IQueryHandler<,>);
+            return RegisterHandler(services, targetType, genericTypeDefinition, lifetime);
+        }
+
+        public static IServiceCollection RegisterCommandHandler<TImpl>(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Scoped)
+        {
+            var targetType = typeof(TImpl);
+            var genericTypeDefinition = typeof(ICustomCommandHandler<,>);
+            return RegisterHandler(services, targetType, genericTypeDefinition, lifetime);
+        }
+
+        private static IServiceCollection RegisterHandler(IServiceCollection services, Type targetType, Type genericTypeDefinition, ServiceLifetime lifetime)
+        {
+            var interfaceType = GetConcreteInterfaceImplementationType(targetType, genericTypeDefinition);
+            if (interfaceType is null)
+            {
+                throw new NotSupportedException($"The type {targetType} doesn't implement {genericTypeDefinition}.");
+            }
+
+            services.Add(new ServiceDescriptor(interfaceType, targetType, lifetime));
+            return services;
+        }
+
+        private static void AddInstancesOfGenericTypeDefinition(IServiceCollection services, Assembly assembly, Type genericTypeDefinition, ServiceLifetime lifetime, bool tryAdd)
+        {
+            var matches =
                 GetLoadableTypes(assembly)
-                .Where(t => t.GetTypeInfo().ImplementedInterfaces.Any(i => InterfaceMatchesGenericTypeDefinition(i, genericTypeDefinition)))
+                .Where(t => TypeImplementsGenericInterface(t, genericTypeDefinition))
                 .Select(t =>
                 new
                 {
                     HandlerType = t,
-                    Interface = t.GetTypeInfo().ImplementedInterfaces.FirstOrDefault(i => InterfaceMatchesGenericTypeDefinition(i, genericTypeDefinition))
+                    Interface = GetConcreteInterfaceImplementationType(t, genericTypeDefinition)
                 });
 
             foreach (var matcheResult in matches)
             {
-                services.TryAdd(new ServiceDescriptor(matcheResult.Interface, matcheResult.HandlerType, lifetime));
+                var descriptor = new ServiceDescriptor(matcheResult.Interface, matcheResult.HandlerType, lifetime);
+                if (tryAdd)
+                {
+                    services.TryAdd(descriptor);
+                }
+                else
+                {
+                    services.Add(descriptor);
+                }
             }
+        }
+
+        private static bool TypeImplementsGenericInterface(Type type, Type genericTypeDefinition)
+        {
+            return null != GetConcreteInterfaceImplementationType(type, genericTypeDefinition);
+        }
+
+        private static Type GetConcreteInterfaceImplementationType(Type type, Type genericTypeDefinition)
+        {
+            return type.GetTypeInfo().ImplementedInterfaces.FirstOrDefault(i => InterfaceMatchesGenericTypeDefinition(i, genericTypeDefinition));
         }
 
         private static bool InterfaceMatchesGenericTypeDefinition(Type interfaceType, Type genericTypeDefinition)

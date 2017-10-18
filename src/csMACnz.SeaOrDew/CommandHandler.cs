@@ -13,15 +13,24 @@ namespace csMACnz.SeaOrDew
             _provider = provider;
         }
 
-        public async Task<CommandResult<TError>> Handle<TCommand, TError>(TCommand command)
+        public async Task<TResult> Handle<TCommand, TResult>(TCommand command)
         {
-            var service = _provider.GetRequiredService<ICommandHandler<TCommand, TError>>();
+            var service = _provider.GetRequiredService<ICustomCommandHandler<TCommand, TResult>>();
             return await service.Handle(command);
         }
+    }
 
-        public Task<CommandResult<CommandError>> Handle<TCommand>(TCommand command)
+    public static class CommandHandlerExtensions
+    {
+        public static Task<CommandResult<CommandError>> Handle<TCommand>(this CommandHandler handler, TCommand command)
         {
-            return Handle<TCommand, CommandError>(command);
+            return handler.Handle<TCommand, CommandResult<CommandError>>(command);
+        }
+        
+        public static Task<TResult> Handle<TCommand, TResult>(this CommandHandler handler, TCommand command)
+        where TCommand: ICustomCommand<TResult>
+        {
+            return handler.Handle<TCommand, TResult>(command);
         }
     }
 }

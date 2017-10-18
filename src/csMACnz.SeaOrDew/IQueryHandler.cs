@@ -6,4 +6,8 @@ namespace csMACnz.SeaOrDew
     {
         Task<TResult> Handle(TQuery query);
     }
+
+    public interface IQuery<TResult>{
+
+    }
 }

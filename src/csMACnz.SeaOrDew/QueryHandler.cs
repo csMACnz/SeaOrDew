@@ -19,4 +19,13 @@ namespace csMACnz.SeaOrDew
             return await service.Handle(command);
         }
     }
+
+    public static class QueryHandlerExtensions
+    {
+        public static Task<TResult> Handle<TQuery, TResult>(this QueryHandler handler, TQuery command)
+        where TQuery : IQuery<TResult>
+        {
+            return handler.Handle<TQuery, TResult>(command);
+        }
+    }
 }

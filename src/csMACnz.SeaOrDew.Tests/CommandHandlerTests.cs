@@ -12,11 +12,11 @@ namespace csMACnz.SeaOrDew.Tests
         public async Task TestCommandHandler_Success()
         {
             var fakeprovider = new FakeServiceProvider();
-            fakeprovider.Add<ICommandHandler<DoFizzBuzzCommand, HttpStatusCode>>(new DoFizzBuzzCommandHandler());
+            fakeprovider.Add<ICustomCommandHandler<DoFizzBuzzCommand, CommandResult<HttpStatusCode>>>(new DoFizzBuzzCommandHandler());
 
             var sut = new CommandHandler(fakeprovider);
 
-            var result = await sut.Handle<DoFizzBuzzCommand, HttpStatusCode>(new DoFizzBuzzCommand());
+            var result = await sut.Handle<DoFizzBuzzCommand, CommandResult<HttpStatusCode>>(new DoFizzBuzzCommand());
             Assert.NotNull(result);
             Assert.True(result.IsSuccess);
             Assert.Equal(default(HttpStatusCode), result.Problem);
@@ -35,11 +35,11 @@ namespace csMACnz.SeaOrDew.Tests
         public async Task TestCommandHandler_Failure()
         {
             var fakeprovider = new FakeServiceProvider();
-            fakeprovider.Add<ICommandHandler<FailToWorkCommand, HttpStatusCode>>(new FailToWorkCommandHandler());
+            fakeprovider.Add<ICustomCommandHandler<FailToWorkCommand, CommandResult<HttpStatusCode>>>(new FailToWorkCommandHandler());
 
             var sut = new CommandHandler(fakeprovider);
 
-            var result = await sut.Handle<FailToWorkCommand, HttpStatusCode>(new FailToWorkCommand());
+            var result = await sut.Handle<FailToWorkCommand, CommandResult<HttpStatusCode>>(new FailToWorkCommand());
             Assert.NotNull(result);
             Assert.False(result.IsSuccess);
             Assert.Equal(HttpStatusCode.InternalServerError, result.Problem);
@@ -59,7 +59,7 @@ namespace csMACnz.SeaOrDew.Tests
         public async Task CommandHandlerOfCommandError_Success()
         {
             var fakeprovider = new FakeServiceProvider();
-            fakeprovider.Add<ICommandHandler<DoMakeWidgetCommand, CommandError>>(new DoMakeWidgetCommandHandler());
+            fakeprovider.Add<ICustomCommandHandler<DoMakeWidgetCommand, CommandResult<CommandError>>>(new DoMakeWidgetCommandHandler());
 
             var sut = new CommandHandler(fakeprovider);
 
@@ -70,7 +70,7 @@ namespace csMACnz.SeaOrDew.Tests
         }
 
         private class DoMakeWidgetCommand { }
-        private class DoMakeWidgetCommandHandler : ICommandHandler<DoMakeWidgetCommand,CommandError>
+        private class DoMakeWidgetCommandHandler : ICommandHandler<DoMakeWidgetCommand, CommandError>
         {
             public Task<CommandResult<CommandError>> Handle(DoMakeWidgetCommand command)
             {
@@ -82,11 +82,11 @@ namespace csMACnz.SeaOrDew.Tests
         public async Task CommandHandlerOfCommandError_Failure()
         {
             var fakeprovider = new FakeServiceProvider();
-            fakeprovider.Add<ICommandHandler<FailToWorkWithCommandErrorCommand, HttpStatusCode>>(new FailToWorkWithCommandErrorCommandHandler());
+            fakeprovider.Add<ICustomCommandHandler<FailToWorkWithCommandErrorCommand, CommandResult<HttpStatusCode>>>(new FailToWorkWithCommandErrorCommandHandler());
 
             var sut = new CommandHandler(fakeprovider);
 
-            var result = await sut.Handle<FailToWorkWithCommandErrorCommand, HttpStatusCode>(new FailToWorkWithCommandErrorCommand());
+            var result = await sut.Handle<FailToWorkWithCommandErrorCommand, CommandResult<HttpStatusCode>>(new FailToWorkWithCommandErrorCommand());
             Assert.NotNull(result);
             Assert.False(result.IsSuccess);
             Assert.Equal(HttpStatusCode.InternalServerError, result.Problem);
