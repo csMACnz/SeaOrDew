@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using csMACnz.SeaOrDew.Tests.TestHandlers.SetA;
 
 namespace csMACnz.SeaOrDew.Tests.Fakes
 {
@@ -14,7 +13,7 @@ namespace csMACnz.SeaOrDew.Tests.Fakes
             {
                 return _data[serviceType];
             }
-            throw new Exception($"{serviceType.FullName} Not found.");
+            return null;
         }
 
         public  void AddHandler<T1,TError>(ICustomCommandHandler<T1, CommandResult<TError>> instance)

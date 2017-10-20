@@ -1,6 +1,6 @@
 ﻿namespace csMACnz.SeaOrDew
 {
-    public class CommandResult<TError>
+    public sealed class CommandResult<TError>
     {
         public TError Problem { get; }
 

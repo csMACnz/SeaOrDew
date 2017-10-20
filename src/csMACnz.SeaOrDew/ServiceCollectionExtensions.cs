@@ -50,7 +50,7 @@ namespace csMACnz.SeaOrDew
 
         private static IServiceCollection RegisterHandler(IServiceCollection services, Type targetType, Type genericTypeDefinition, ServiceLifetime lifetime)
         {
-            var interfaceType = GetConcreteInterfaceImplementationType(targetType.GetTypeInfo(), genericTypeDefinition);
+            var interfaceType = targetType.GetTypeInfo().GetConcreteInterfaceImplementationForGenericInterface(genericTypeDefinition);
             if (interfaceType is null)
             {
                 throw new NotSupportedException($"The type {targetType} doesn't implement {genericTypeDefinition}.");
@@ -68,7 +68,7 @@ namespace csMACnz.SeaOrDew
                 new
                 {
                     HandlerType = t,
-                    Interface = GetConcreteInterfaceImplementationType(t, genericTypeDefinition)
+                    Interface = t.GetConcreteInterfaceImplementationForGenericInterface(genericTypeDefinition)
                 })
                 .Where(t =>
                     t.Interface != null &&
@@ -88,16 +88,6 @@ namespace csMACnz.SeaOrDew
             }
         }
 
-        private static Type GetConcreteInterfaceImplementationType(TypeInfo type, Type genericTypeDefinition)
-        {
-            return type.ImplementedInterfaces.FirstOrDefault(i => InterfaceMatchesGenericTypeDefinition(i, genericTypeDefinition));
-        }
-
-        private static bool InterfaceMatchesGenericTypeDefinition(Type interfaceType, Type genericTypeDefinition)
-        {
-            return interfaceType.GetTypeInfo().IsGenericType && interfaceType.GetGenericTypeDefinition() == genericTypeDefinition;
-        }
-
         private static IEnumerable<TypeInfo> GetAccessibleTypes(this Assembly assembly)
         {
             try
@@ -109,6 +99,5 @@ namespace csMACnz.SeaOrDew
                 return ex.Types.Where(t => t != null).Select(t => t.GetTypeInfo());
             }
         }
-
     }
 }

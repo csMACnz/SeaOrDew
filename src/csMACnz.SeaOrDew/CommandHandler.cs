@@ -16,8 +16,34 @@ namespace csMACnz.SeaOrDew
 
         public async Task<TResult> Handle<TCommand, TResult>(TCommand command)
         {
-            var service = _provider.GetRequiredService<ICustomCommandHandler<TCommand, TResult>>();
+            var service = _provider.GetService<ICustomCommandHandler<TCommand, TResult>>() ?? throw NewHandlerNotFoundException<TCommand, TResult>();
+            
             return await service.Handle(command);
+        }
+
+        private Exception NewHandlerNotFoundException<TCommand, TResult>()
+        {
+            var expectedType = typeof(ICustomCommandHandler<TCommand, TResult>);
+            var commandType = typeof(TCommand);
+            var resultType = typeof(TResult);
+            var handlerInterface = $"ICustomCommandHandler<{commandType.Name}, {resultType.Name}>";
+            if(resultType == typeof(CommandResult<CommandError>))
+            {
+                handlerInterface = $"ICommandHandler<{commandType.Name}>";
+            }
+            else if (resultType.GetTypeInfo().IsConcreteInstanceOfGenericTypeDefinition(typeof(CommandResult<>)))
+            {
+                var errorType = resultType.GenericTypeArguments[0];
+                handlerInterface = $"ICommandHandler<{commandType.Name}, {errorType.Name}>";
+            }
+            return new HandlerNotFoundException(
+                expectedType,
+                $@"Could not resolve {handlerInterface} from the service provider. Please try one of the following:
+* Check that you have registerd the type with the IServiceProvider
+* Make sure your Command matches the types expected by the command handler
+* Use the correct types when calling Handle
+* Expected Command Type: {commandType.FullName}
+* Expected Response Type: {resultType.FullName}");
         }
     }
 

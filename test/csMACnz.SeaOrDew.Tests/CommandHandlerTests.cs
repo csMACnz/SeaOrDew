@@ -1,4 +1,5 @@
 ﻿using csMACnz.SeaOrDew.Tests.Fakes;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace csMACnz.SeaOrDew.Tests
     public class CommandHandlerTests
     {
         [Fact]
-        public async Task TestCommandHandler_Success()
+        public async Task Handle_SuccessfulCommand_Success()
         {
             var fakeprovider = new FakeServiceProvider();
             fakeprovider.Add<ICustomCommandHandler<DoFizzBuzzCommand, CommandResult<HttpStatusCode>>>(new DoFizzBuzzCommandHandler());
@@ -32,7 +33,7 @@ namespace csMACnz.SeaOrDew.Tests
         }
 
         [Fact]
-        public async Task TestCommandHandler_Failure()
+        public async Task Handle_FailureCommand_Fails()
         {
             var fakeprovider = new FakeServiceProvider();
             fakeprovider.Add<ICustomCommandHandler<FailToWorkCommand, CommandResult<HttpStatusCode>>>(new FailToWorkCommandHandler());
@@ -56,7 +57,7 @@ namespace csMACnz.SeaOrDew.Tests
         }
 
         [Fact]
-        public async Task CommandHandlerOfCommandError_Success()
+        public async Task Handle_CommandWithCustomErrorType_Success()
         {
             var fakeprovider = new FakeServiceProvider();
             fakeprovider.Add<ICustomCommandHandler<DoMakeWidgetCommand, CommandResult<CommandError>>>(new DoMakeWidgetCommandHandler());
@@ -79,7 +80,7 @@ namespace csMACnz.SeaOrDew.Tests
         }
 
         [Fact]
-        public async Task CommandHandlerOfCommandError_Failure()
+        public async Task Handle_FailureCommandWithCustomErrorType_Failure()
         {
             var fakeprovider = new FakeServiceProvider();
             fakeprovider.Add<ICustomCommandHandler<FailToWorkWithCommandErrorCommand, CommandResult<HttpStatusCode>>>(new FailToWorkWithCommandErrorCommandHandler());
@@ -102,5 +103,61 @@ namespace csMACnz.SeaOrDew.Tests
             }
         }
 
+        [Fact]
+        public async Task Handle_MissingCustomCommandHandler_ThrowsException()
+        {
+            var fakeprovider = new FakeServiceProvider();
+            var sut = new CommandHandler(fakeprovider);
+
+            var exception = await Assert.ThrowsAsync<HandlerNotFoundException>(async () => await sut.Handle<UnregisteredCommand, CustomResult>(new UnregisteredCommand()));
+            Assert.Equal(typeof(ICustomCommandHandler<UnregisteredCommand, CustomResult>), exception.ExpectedType);
+            Assert.Equal(
+                $@"Could not resolve ICustomCommandHandler<UnregisteredCommand, CustomResult> from the service provider. Please try one of the following:
+* Check that you have registerd the type with the IServiceProvider
+* Make sure your Command matches the types expected by the command handler
+* Use the correct types when calling Handle
+* Expected Command Type: {typeof(UnregisteredCommand).FullName}
+* Expected Response Type: {typeof(CustomResult).FullName}",
+                exception.Message);
+        }
+
+        [Fact]
+        public async Task Handle_MissingCustomErrorHandler_ThrowsException()
+        {
+            var fakeprovider = new FakeServiceProvider();
+            var sut = new CommandHandler(fakeprovider);
+
+            var exception = await Assert.ThrowsAsync<HandlerNotFoundException>(async () => await sut.Handle<UnregisteredCommand, CommandResult<HttpStatusCode>>(new UnregisteredCommand()));
+            Assert.Equal(typeof(ICustomCommandHandler<UnregisteredCommand, CommandResult<HttpStatusCode>>), exception.ExpectedType);
+            Assert.Equal(
+                $@"Could not resolve ICommandHandler<UnregisteredCommand, HttpStatusCode> from the service provider. Please try one of the following:
+* Check that you have registerd the type with the IServiceProvider
+* Make sure your Command matches the types expected by the command handler
+* Use the correct types when calling Handle
+* Expected Command Type: {typeof(UnregisteredCommand).FullName}
+* Expected Response Type: {typeof(CommandResult<HttpStatusCode>).FullName}",
+                exception.Message);
+        }
+
+        [Fact]
+        public async Task Handle_MissingHandler_ThrowsException()
+        {
+            var fakeprovider = new FakeServiceProvider();
+            var sut = new CommandHandler(fakeprovider);
+
+            var exception = await Assert.ThrowsAsync<HandlerNotFoundException>(async () => await sut.Handle<UnregisteredCommand, CommandResult<CommandError>>(new UnregisteredCommand()));
+            Assert.Equal(typeof(ICustomCommandHandler<UnregisteredCommand, CommandResult<CommandError>>), exception.ExpectedType);
+            Assert.Equal(
+                $@"Could not resolve ICommandHandler<UnregisteredCommand> from the service provider. Please try one of the following:
+* Check that you have registerd the type with the IServiceProvider
+* Make sure your Command matches the types expected by the command handler
+* Use the correct types when calling Handle
+* Expected Command Type: {typeof(UnregisteredCommand).FullName}
+* Expected Response Type: {typeof(CommandResult<CommandError>).FullName}",
+                exception.Message);
+        }
+
+        private class UnregisteredCommand { }
+        private class CustomResult { }
     }
 }
