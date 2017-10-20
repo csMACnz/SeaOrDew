@@ -8,7 +8,7 @@ namespace csMACnz.SeaOrDew.Tests.TestHandlers
 
         public const int OtherTestsHandlersCount = 6;
         public const int SetACommandCount = 3;
-        public const int SetAQueryCount = 0;
+        public const int SetAQueryCount = 1;
         public const int SetBCommandCount = 2;
         public const int SetBQueryCount = 0;
         public const int SetACount = SetACommandCount + SetAQueryCount;

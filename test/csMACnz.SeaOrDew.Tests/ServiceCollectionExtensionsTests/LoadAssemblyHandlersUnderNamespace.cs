@@ -9,7 +9,7 @@ namespace csMACnz.SeaOrDew.Tests.ServiceCollectionExtensionsTests
         [InlineData("csMACnz.SeaOrDew.Tests.TestHandlers", AssemblyHandlerCount)]
         [InlineData("csMACnz.SeaOrDew.Tests.TestHandlers.SetA", SetACount)]
         [InlineData("csMACnz.SeaOrDew.Tests.TestHandlers.SetB", SetBCount)]
-        public void LoadAssemblyHandlersUnderNamespace_CorrectlyAddsHandlers(
+        public void CorrectlyAddsHandlers(
             string namespacePrefix,
             int handlerCount)
         {

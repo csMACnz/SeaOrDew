@@ -6,7 +6,7 @@ namespace csMACnz.SeaOrDew.Tests.ServiceCollectionExtensionsTests
     public class LoadAllHandlersFromAssembly
     {
         [Fact]
-        public void LoadAllFromAssembly_CorrectlyAddsHandlers()
+        public void CorrectlyAddsHandlers()
         {
             var fakeCollection = new TestServiceCollection();
             fakeCollection.AddSeaOrDewHandlers(options =>
