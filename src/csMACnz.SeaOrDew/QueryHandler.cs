@@ -16,8 +16,24 @@ namespace csMACnz.SeaOrDew
 
         public async Task<TResult> Handle<TQuery, TResult>(TQuery command)
         {
-            var service = _provider.GetRequiredService<IQueryHandler<TQuery, TResult>>();
+            var service = _provider.GetService<IQueryHandler<TQuery, TResult>>() ?? throw NewHandlerNotFoundException<TQuery, TResult>();
             return await service.Handle(command);
+        }
+
+        private Exception NewHandlerNotFoundException<TQuery, TResult>()
+        {
+            var expectedType = typeof(IQueryHandler<TQuery, TResult>);
+            var queryType = typeof(TQuery);
+            var resultType = typeof(TResult);
+            
+            return new HandlerNotFoundException(
+                expectedType,
+                $@"Could not resolve IQueryHandler<{queryType.Name}, {resultType.Name}> from the service provider. Please try one of the following:
+* Check that you have registerd the type with the IServiceProvider
+* Make sure your Query matches the types expected by the QueryHandler
+* Use the correct types when calling Handle
+* Expected Query Type: {queryType.FullName}
+* Expected Response Type: {resultType.FullName}");
         }
     }
 
