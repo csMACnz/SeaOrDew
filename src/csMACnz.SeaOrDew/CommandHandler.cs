@@ -39,7 +39,7 @@ namespace csMACnz.SeaOrDew
             return new HandlerNotFoundException(
                 expectedType,
                 $@"Could not resolve {handlerInterface} from the service provider. Please try one of the following:
-* Check that you have registerd the type with the IServiceProvider
+* Check that you have registered the type with the IServiceProvider
 * Make sure your Command matches the types expected by the command handler
 * Use the correct types when calling Handle
 * Expected Command Type: {commandType.FullName}

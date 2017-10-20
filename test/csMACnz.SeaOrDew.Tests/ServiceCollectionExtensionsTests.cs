@@ -7,7 +7,7 @@ namespace csMACnz.SeaOrDew.Tests
 {
     public class ServiceCollectionExtensionsTests
     {
-        public const int OtherTestsHandlersCount = 5;
+        public const int OtherTestsHandlersCount = 6;
         public const int SetACommandCount = 3;
         public const int SetAQueryCount = 0;
         public const int SetBCommandCount = 2;
