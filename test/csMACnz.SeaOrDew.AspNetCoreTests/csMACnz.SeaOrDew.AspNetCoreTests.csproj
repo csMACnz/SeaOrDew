@@ -4,6 +4,7 @@
     <TargetFrameworks>netcoreapp1.0;netcoreapp1.1;netcoreapp2.0;net451;net462</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <RootNamespace>Tests</RootNamespace>
+    <DebugType>full</DebugType>
   </PropertyGroup>
 
   <ItemGroup>

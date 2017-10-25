@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net452;net46;netcoreapp1.0;netcoreapp2.0</TargetFrameworks>
-
+    <DebugType>full</DebugType>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 

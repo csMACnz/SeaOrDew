@@ -251,6 +251,7 @@ paket-files/
 .idea/
 *.sln.iml
 
-
+CoverageResult.xml
 pack/
 BuildTools/
+TestResults/
