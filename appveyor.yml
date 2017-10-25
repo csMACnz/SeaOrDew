@@ -3,7 +3,7 @@ build_script:
 - ps: >-
     dotnet restore
 
-    dotnet build -c Release csMACnz.SeaOrDew.sln /property:VersionPrefix=$env:APPVEYOR_BUILD_VERSION
+    dotnet build -c Release SeaOrDew.sln /property:VersionPrefix=$env:APPVEYOR_BUILD_VERSION
 
     ./Coverage.ps1
 
