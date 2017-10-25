@@ -1,4 +1,7 @@
 version: 1.0.{build}
+environment:
+  COVERALLS_REPO_TOKEN:
+    secure: yWeZBWOELEMEWYb/L0MBn4cgu6pknOKEiXHyAhad4gkrnxSx1vSN4NPIeVif+ryB
 build_script:
 - ps: >-
     dotnet restore
