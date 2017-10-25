@@ -18,8 +18,16 @@ namespace csMACnz.SeaOrDew
 
         public static IServiceCollection AddSeaOrDewHandlers(this IServiceCollection services, SeaOrDewOptions options = null)
         {
-            services.AddSingleton<QueryHandler>();
-            services.AddSingleton<CommandHandler>();
+            if (options?.TryAdd == true)
+            {
+                services.TryAddSingleton<QueryHandler>();
+                services.TryAddSingleton<CommandHandler>();
+            }
+            else
+            {
+                services.AddSingleton<QueryHandler>();
+                services.AddSingleton<CommandHandler>();
+            }
             if (options != null)
             {
                 foreach (var handlerSource in options.CommandHandlerAssemblies)

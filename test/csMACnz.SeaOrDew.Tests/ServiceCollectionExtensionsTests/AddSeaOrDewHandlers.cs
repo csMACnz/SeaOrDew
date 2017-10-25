@@ -36,7 +36,7 @@ namespace csMACnz.SeaOrDew.Tests.ServiceCollectionExtensionsTests
             Assert.Contains(fakeCollection, s => s.ServiceType == typeof(CommandHandler));
             Assert.Contains(fakeCollection, s => s.ServiceType == typeof(QueryHandler));
         }
-        
+
         [Fact]
         public void NullLambda_CorrectlyAddsMainServices()
         {
@@ -51,9 +51,9 @@ namespace csMACnz.SeaOrDew.Tests.ServiceCollectionExtensionsTests
         public void OptionsLambda_CorrectlyAddsMainServices()
         {
             var fakeCollection = new TestServiceCollection();
-            fakeCollection.AddSeaOrDewHandlers(options=>
+            fakeCollection.AddSeaOrDewHandlers(options =>
             {
-                
+
             });
 
             Assert.Contains(fakeCollection, s => s.ServiceType == typeof(CommandHandler));
@@ -86,11 +86,12 @@ namespace csMACnz.SeaOrDew.Tests.ServiceCollectionExtensionsTests
                 options.UseLifetimeScope(lifetime);
             });
 
-            Assert.All(fakeCollection, s => {
+            Assert.All(fakeCollection, s =>
+            {
                 if (s.ServiceType == typeof(CommandHandler)) return;
                 if (s.ServiceType == typeof(QueryHandler)) return;
                 Assert.Equal(lifetime, s.Lifetime);
             });
-        }      
+        }
     }
 }
