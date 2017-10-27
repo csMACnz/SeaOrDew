@@ -1,9 +1,4 @@
-using System.Threading.Tasks;
-using csMACnz.SeaOrDew.Tests.TestHandlers.SetA;
 using Xunit;
-using System.Net;
-using csMACnz.SeaOrDew.Tests.TestHandlers.SetB;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 
