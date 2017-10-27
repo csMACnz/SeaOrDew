@@ -9,12 +9,7 @@ namespace csMACnz.SeaOrDew
         {
             ExpectedType = expectedType;
         }
-        public HandlerNotFoundException(Type expectedType, string message, Exception innerException)
-            : base(message, innerException)
-        {
-            ExpectedType = expectedType;
-        }
-
+        
         public Type ExpectedType { get; }
     }
 }
