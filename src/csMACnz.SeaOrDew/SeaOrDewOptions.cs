@@ -12,7 +12,7 @@ namespace csMACnz.SeaOrDew
         public IEnumerable<HandlerSource> CommandHandlerAssemblies { get { return _commandAssemblies; } }
         public IEnumerable<HandlerSource> QueryHandlerAssemblies { get { return _queryAssemblies; } }
 
-        public ServiceLifetime ServiceLifetime { get; private set; }
+        public ServiceLifetime ServiceLifetime { get; private set; } = ServiceLifetime.Scoped;
 
         public bool TryAdd { get; set; }
 
@@ -85,7 +85,7 @@ namespace csMACnz.SeaOrDew
     public class HandlerSource
     {
         public HandlerSource(Assembly assembly)
-            :this(assembly, null)
+            : this(assembly, null)
         {
         }
 

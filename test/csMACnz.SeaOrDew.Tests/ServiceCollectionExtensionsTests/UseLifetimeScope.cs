@@ -15,18 +15,9 @@ namespace csMACnz.SeaOrDew.Tests
             var fakeCollection = new TestServiceCollection();
             fakeCollection.AddSeaOrDewHandlers();
 
-            Assert.Collection(
-                fakeCollection,
-            s =>
-            {
-                Assert.Equal(s.ServiceType,typeof(QueryHandler));
-            },
-            s =>
-            {
-                Assert.Equal(s.ServiceType, typeof(CommandHandler));
-            });
+            ServicesAssert.OnlyHandlerResolversRegistered(fakeCollection);
         }
-        
+
         [Theory]
         [InlineData(ServiceLifetime.Scoped)]
         [InlineData(ServiceLifetime.Singleton)]
@@ -39,16 +30,7 @@ namespace csMACnz.SeaOrDew.Tests
                 options.UseLifetimeScope(lifetime);
             });
 
-            Assert.Collection(
-                fakeCollection,
-            s =>
-            {
-                Assert.Equal(s.ServiceType,typeof(QueryHandler));
-            },
-            s =>
-            {
-                Assert.Equal(s.ServiceType, typeof(CommandHandler));
-            });
+            ServicesAssert.OnlyHandlerResolversRegistered(fakeCollection);
         }
 
         [Fact]

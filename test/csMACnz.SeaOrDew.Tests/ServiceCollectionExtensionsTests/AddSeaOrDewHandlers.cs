@@ -13,8 +13,7 @@ namespace csMACnz.SeaOrDew.Tests.ServiceCollectionExtensionsTests
             var fakeCollection = new TestServiceCollection();
             fakeCollection.AddSeaOrDewHandlers();
 
-            Assert.Contains(fakeCollection, s => s.ServiceType == typeof(CommandHandler));
-            Assert.Contains(fakeCollection, s => s.ServiceType == typeof(QueryHandler));
+            ServicesAssert.OnlyHandlerResolversRegistered(fakeCollection);
         }
 
         [Fact]
@@ -23,8 +22,7 @@ namespace csMACnz.SeaOrDew.Tests.ServiceCollectionExtensionsTests
             var fakeCollection = new TestServiceCollection();
             fakeCollection.AddSeaOrDewHandlers((SeaOrDewOptions)null);
 
-            Assert.Contains(fakeCollection, s => s.ServiceType == typeof(CommandHandler));
-            Assert.Contains(fakeCollection, s => s.ServiceType == typeof(QueryHandler));
+            ServicesAssert.OnlyHandlerResolversRegistered(fakeCollection);
         }
 
         [Fact]
@@ -33,8 +31,7 @@ namespace csMACnz.SeaOrDew.Tests.ServiceCollectionExtensionsTests
             var fakeCollection = new TestServiceCollection();
             fakeCollection.AddSeaOrDewHandlers(new SeaOrDewOptions());
 
-            Assert.Contains(fakeCollection, s => s.ServiceType == typeof(CommandHandler));
-            Assert.Contains(fakeCollection, s => s.ServiceType == typeof(QueryHandler));
+            ServicesAssert.OnlyHandlerResolversRegistered(fakeCollection);
         }
 
         [Fact]
@@ -43,8 +40,7 @@ namespace csMACnz.SeaOrDew.Tests.ServiceCollectionExtensionsTests
             var fakeCollection = new TestServiceCollection();
             fakeCollection.AddSeaOrDewHandlers((Action<SeaOrDewOptions>)null);
 
-            Assert.Contains(fakeCollection, s => s.ServiceType == typeof(CommandHandler));
-            Assert.Contains(fakeCollection, s => s.ServiceType == typeof(QueryHandler));
+            ServicesAssert.OnlyHandlerResolversRegistered(fakeCollection);
         }
 
         [Fact]
@@ -53,11 +49,9 @@ namespace csMACnz.SeaOrDew.Tests.ServiceCollectionExtensionsTests
             var fakeCollection = new TestServiceCollection();
             fakeCollection.AddSeaOrDewHandlers(options =>
             {
-
             });
 
-            Assert.Contains(fakeCollection, s => s.ServiceType == typeof(CommandHandler));
-            Assert.Contains(fakeCollection, s => s.ServiceType == typeof(QueryHandler));
+            ServicesAssert.OnlyHandlerResolversRegistered(fakeCollection);
         }
 
         [Fact]
@@ -65,17 +59,8 @@ namespace csMACnz.SeaOrDew.Tests.ServiceCollectionExtensionsTests
         {
             var fakeCollection = new TestServiceCollection();
             fakeCollection.AddSeaOrDewHandlers();
-
-            Assert.Collection(
-                fakeCollection,
-            s =>
-            {
-                Assert.Equal(s.ServiceType,typeof(QueryHandler));
-            },
-            s =>
-            {
-                Assert.Equal(s.ServiceType, typeof(CommandHandler));
-            });
+            
+            ServicesAssert.OnlyHandlerResolversRegistered(fakeCollection);
         }
     }
 }
