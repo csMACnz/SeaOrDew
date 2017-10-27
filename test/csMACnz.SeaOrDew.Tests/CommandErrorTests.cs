@@ -42,6 +42,13 @@ namespace csMACnz.SeaOrDew.Tests
 
         [Theory]
         [MemberData(nameof(NullOrEmptyStrings))]
+        public void StringExceptionConstructor_NullOrWhitespaceMessageFails(string input)
+        {
+            Assert.Throws<ArgumentException>(() => new CommandError(input, new Exception()));
+        }
+
+        [Theory]
+        [MemberData(nameof(NullOrEmptyStrings))]
         public void CodeStringExceptionConstructor_NullOrWhitespaceMessageFails(string input)
         {
             Assert.Throws<ArgumentException>(() => new CommandError(42, input, new Exception()));
@@ -69,6 +76,39 @@ namespace csMACnz.SeaOrDew.Tests
             Assert.Equal(message, error.Message);
             Assert.Equal(code, error.ErrorCode);
             Assert.Null(error.Ex);
+        }
+
+        [Fact]
+        public void StringExceptionConstructor_nullException_ExceptionSet()
+        {
+            var message = "Failed.";
+            Exception exception = null;
+            var error = new CommandError(message, exception);
+
+            Assert.Equal(message, error.Message);
+            Assert.Null(error.Ex);
+        }
+
+        [Fact]
+        public void StringExceptionConstructor_newException_ExceptionSet()
+        {
+            var message = "Failed.";
+            var exception = new Exception();
+            var error = new CommandError(message, exception);
+
+            Assert.Equal(message, error.Message);
+            Assert.Equal(exception, error.Ex);
+        }
+
+        [Fact]
+        public void StringExceptionConstructor_CustomException_ExceptionSet()
+        {
+            var message = "Failed.";
+            var exception = new CustomException();
+            var error = new CommandError(message, exception);
+
+            Assert.Equal(message, error.Message);
+            Assert.Equal(exception, error.Ex);
         }
 
         [Fact]
