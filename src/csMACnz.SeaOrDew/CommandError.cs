@@ -23,6 +23,11 @@ namespace csMACnz.SeaOrDew
 
         public CommandError(int errorCode, string message, Exception ex)
         {
+            if (string.IsNullOrWhiteSpace(message))
+            {
+                throw new ArgumentException($"`{nameof(message)}` is required. It must not be null or whitespace.", nameof(message));
+            }
+
             ErrorCode = errorCode;
             Message = message;
             Ex = ex;

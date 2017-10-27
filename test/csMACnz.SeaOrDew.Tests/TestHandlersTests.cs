@@ -16,7 +16,7 @@ namespace csMACnz.SeaOrDew.Tests
 
             return new CommandHandler(services.BuildServiceProvider());
         }
-        
+
         private QueryHandler BuildQueryHandler<T>()
         {
             var services = new ServiceCollection();
@@ -62,12 +62,23 @@ namespace csMACnz.SeaOrDew.Tests
         }
 
         [Fact]
-        public async Task SetB_AssertCommandPropertySetCommandHandlerTest()
+        public async Task SetB_AssertCommandPropertySetCommandHandler_SuccessMode()
         {
             var sut = BuildCommandHandler<AssertCommandPropertySetCommandHandler>();
 
             var result = await sut.Handle(new AssertCommandPropertySetCommand { ASetProperty = true });
             Assert.True(result.IsSuccess);
+        }
+        
+        [Fact]
+        public async Task SetB_AssertCommandPropertySetCommandHandler_FailMode()
+        {
+            var sut = BuildCommandHandler<AssertCommandPropertySetCommandHandler>();
+
+            var result = await sut.Handle(new AssertCommandPropertySetCommand { ASetProperty = false });
+            Assert.False(result.IsSuccess);
+            Assert.NotNull(result.Problem);
+            Assert.Equal("Failed.", result.Problem.Message);
         }
         
         [Fact]
