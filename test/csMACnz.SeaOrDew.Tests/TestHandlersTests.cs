@@ -16,12 +16,13 @@ namespace csMACnz.SeaOrDew.Tests
 
             return new CommandHandler(services.BuildServiceProvider());
         }
-        private CommandHandler BuildQueryHandler<T>()
+        
+        private QueryHandler BuildQueryHandler<T>()
         {
             var services = new ServiceCollection();
             services.RegisterQueryHandler<T>();
 
-            return new CommandHandler(services.BuildServiceProvider());
+            return new QueryHandler(services.BuildServiceProvider());
         }
 
         [Fact]
@@ -49,6 +50,15 @@ namespace csMACnz.SeaOrDew.Tests
 
             var result = await sut.Handle(new TestCommand());
             Assert.True(result.IsSuccess);
+        }
+        
+        [Fact]
+        public async Task SetA_TestQueryHandlerTest()
+        {
+            var sut = BuildQueryHandler<TestQueryHandler>();
+
+            var result = await sut.Handle(new TestQuery());
+            Assert.NotNull(result);
         }
 
         [Fact]
