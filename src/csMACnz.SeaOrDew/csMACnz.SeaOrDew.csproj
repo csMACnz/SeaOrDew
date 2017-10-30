@@ -1,6 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+  <Product>coveralls.net</Product>
+    <AssemblyTitle>csMACnz.SeaOrDew</AssemblyTitle>
+    <NeutralLanguage>en-NZ</NeutralLanguage>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Copyright>Copyright © csMACnz 2017</Copyright>
+    <Title>SeaOrDew - Command (Do) Query (See) library</Title>
+    <Authors>dev-markc</Authors>
+    <Description>SeaOrDew - A Command (Do) and Query (See) helper library</Description>
+    <PackageId>csMACnz.SeaOrDew</PackageId>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageLicenseUrl>https://github.com/csmacnz/SeaOrDew/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/csmacnz/SeaOrDew</PackageProjectUrl>
+    <PackageIconUrl></PackageIconUrl>
+    <PackageTags>UseCase Command Query Interactor CQRS</PackageTags>
     <TargetFramework>netstandard1.0</TargetFramework>
     <DebugType>full</DebugType>
   </PropertyGroup>
