@@ -263,10 +263,11 @@ public class LockUserAccountCommandResult
 
 Just to spell it out, the `ICustomCommand<TResult>`, `ICommand<TError>` and
 `ICommand` interfaces are optional, but if you provide them, it lights up
-type inference extensions on the handler. Reasonls to leae these out include
-wanting to avoid referencing this library from a contracts project.
+type inference extensions on the handler. Reasons to leave these out include
+wanting to avoid referencing this library from a contracts project, and wanting to force explicit usage of Handle<,> generic arguments.
 
-[WARN]:If you leave these out, the extensions will assume you are using
+[WARN]:If you leave these interfaces out, the extensions will assume you are using
 CommandResult and CommandError default types unless you explicity set the
 Generic types (`handler.Handle<TCommand, TResult>`)
 
+It is recommended to test your command resolution from your IServiceProvider with unit and/or integration tests to make sure resolution will work as expected, with the correct types.
