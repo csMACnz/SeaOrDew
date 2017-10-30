@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using csMACnz.SeaOrDew;
 using System.Reflection;
+using Xunit;
 
 namespace Tests.Server
 {
@@ -31,27 +32,28 @@ namespace Tests.Server
                 {
                     case "/query":
                         var testQueryResult = await queryHandler.Handle(new TestQuery());
-                        if (testQueryResult != null)
-                        {
-                            response = "query";
-                            result = HttpStatusCode.OK;
-                        }
+                        Assert.NotNull(testQueryResult);
+                        response = "query";
+                        result = HttpStatusCode.OK;
                         break;
                     case "/commandFail":
-                        var commandFailResult = await commandHandler.Handle(new FailureCommand());
-                        if (!commandFailResult.IsSuccess)
-                        {
-                            response = "failed command";
-                            result = HttpStatusCode.PreconditionFailed;
-                        }
-                        break;
                     case "/commandPass":
-                        var commandResult = await commandHandler.Handle(new SuccessCommand());
+                        var pass = context.Request.Path == "/commandPass";
+                        var commandResult = await commandHandler.Handle(new TestCommand(pass));
                         if (commandResult.IsSuccess)
                         {
                             response = "command";
                             result = HttpStatusCode.OK;
                         }
+                        else
+                        {
+                            response = "failed command";
+                            result = HttpStatusCode.PreconditionFailed;
+                        }
+                        break;
+                    default:
+                        response = "Not Found";
+                        result = HttpStatusCode.NotFound;
                         break;
                 }
                 context.Response.StatusCode = (int)result;
