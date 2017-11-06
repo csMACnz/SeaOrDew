@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-  <Product>coveralls.net</Product>
+    <Product>csMACnz.SeaOrDew</Product>
     <AssemblyTitle>csMACnz.SeaOrDew</AssemblyTitle>
     <NeutralLanguage>en-NZ</NeutralLanguage>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
