@@ -18,15 +18,18 @@ namespace csMACnz.SeaOrDew
 
         public static IServiceCollection AddSeaOrDewHandlers(this IServiceCollection services, SeaOrDewOptions options = null)
         {
+            var descriptors = new[] {
+                new ServiceDescriptor(typeof(QueryHandler), typeof(QueryHandler), options.ServiceLifetime),
+                new ServiceDescriptor(typeof(CommandHandler), typeof(CommandHandler), options.ServiceLifetime)
+            };
+
             if (options?.TryAdd == true)
             {
-                services.TryAddSingleton<QueryHandler>();
-                services.TryAddSingleton<CommandHandler>();
+                services.TryAdd(descriptors);
             }
             else
             {
-                services.AddSingleton<QueryHandler>();
-                services.AddSingleton<CommandHandler>();
+                services.Add(descriptors);
             }
             if (options != null)
             {
