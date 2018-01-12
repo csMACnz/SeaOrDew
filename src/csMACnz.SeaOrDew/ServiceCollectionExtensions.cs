@@ -19,8 +19,8 @@ namespace csMACnz.SeaOrDew
         public static IServiceCollection AddSeaOrDewHandlers(this IServiceCollection services, SeaOrDewOptions options = null)
         {
             var descriptors = new[] {
-                new ServiceDescriptor(typeof(QueryHandler), typeof(QueryHandler), options.ServiceLifetime),
-                new ServiceDescriptor(typeof(CommandHandler), typeof(CommandHandler), options.ServiceLifetime)
+                new ServiceDescriptor(typeof(QueryHandler), typeof(QueryHandler), options?.ServiceLifetime??ServiceLifetime.Scoped),
+                new ServiceDescriptor(typeof(CommandHandler), typeof(CommandHandler), options?.ServiceLifetime??ServiceLifetime.Scoped)
             };
 
             if (options?.TryAdd == true)
